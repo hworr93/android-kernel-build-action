@@ -189,6 +189,24 @@ jobs:
          echo -e "\e[33m[Done]\e[0m" Add KPM configuration to kernel
          echo -e "\e[33m[Done]\e[0m" Enable KPM feature
 
+      - name: Apply custom GitHub patches
+        run: |
+         cd Buildkernel/common
+         
+         # Clone your patch repository
+         git clone https://github.com/worr-har21/patches.git custom_patches
+         
+         # Loop through and apply all .patch files
+         for patch_file in custom_patches/*.patch; do
+           echo "Applying $patch_file"
+           patch -p1 -F 3 < "$patch_file"
+         done
+         
+         # Clean up the cloned repo to keep the workspace tidy
+         rm -rf custom_patches
+         echo -e "\e[33m[Done]\e[0m" Applied custom patches
+         
+      
       - name: Set up kernel suffix
         run: |
          cd Buildkernel
